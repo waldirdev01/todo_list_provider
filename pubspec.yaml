@@ -41,6 +41,7 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_signin_button: ^2.0.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,7 +81,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: TodoListIcons
+      fonts:
+        - asset: assets/fonts/todo_list_icons.ttf
+          weight: 400
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

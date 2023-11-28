@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extensions.dart';
-import 'package:todo_list_provider/app/widget/todo_list_logo.dart';
+import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
+import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,18 +33,15 @@ class _LoginPageState extends State<LoginPage> {
                     child: Form(
                       child: Column(
                         children: [
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Usuário',
-                              border: OutlineInputBorder(),
-                            ),
+                          TodoListField(
+                            label: 'e-mail',
+                            suffixIcon: IconButton(
+                                onPressed: () {}, icon: Icon(Icons.email)),
                           ),
                           const SizedBox(height: 10),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Senha',
-                              border: OutlineInputBorder(),
-                            ),
+                          TodoListField(
+                            label: 'senha',
+                            obscureText: true,
                           ),
                           const SizedBox(height: 10),
                           Row(
