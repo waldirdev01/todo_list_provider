@@ -36,7 +36,8 @@ class _LoginPageState extends State<LoginPage> {
                           TodoListField(
                             label: 'e-mail',
                             suffixIcon: IconButton(
-                                onPressed: () {}, icon: Icon(Icons.email)),
+                                onPressed: () {},
+                                icon: const Icon(Icons.email)),
                           ),
                           const SizedBox(height: 10),
                           TodoListField(
@@ -104,7 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                               style: context.titleStyle,
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushReplacementNamed('/register');
+                              },
                               child: Text(
                                 'Cadastre-se',
                                 style: context.titleStyle,
