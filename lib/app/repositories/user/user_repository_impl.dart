@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_list_provider/app/exceptions/auth_exceptions.dart';
 import 'package:todo_list_provider/app/repositories/user/user_repository.dart';
 
-class UserRepositoryImplements implements UserRepository {
+class UserRepositoryImpl implements UserRepository {
   final FirebaseAuth _firebaseAuth;
 
-  UserRepositoryImplements({required FirebaseAuth firebaseAuth})
+  UserRepositoryImpl({required FirebaseAuth firebaseAuth})
       : _firebaseAuth = firebaseAuth;
+
   @override
   Future<User?> register(String email, String password) async {
     try {
@@ -14,15 +15,9 @@ class UserRepositoryImplements implements UserRepository {
           .createUserWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-exists' ||
+      if (e.code == 'email-already-in-use' ||
           e.code == 'auth/email-already-exists') {
-        final loginTypes =
-            await _firebaseAuth.fetchSignInMethodsForEmail(email);
-        if (loginTypes.contains('password')) {
-          throw AuthException(message: 'E-mail já cadastrado');
-        } else {
-          throw AuthException(message: 'E-mail já cadastrado com o Google');
-        }
+        throw AuthException(message: 'E-mail já cadastrado');
       } else if (e.code == 'invalid-email' || e.code == 'auth/invalid-email') {
         throw AuthException(message: 'E-mail inválido fornecido');
       } else if (e.code == 'operation-not-allowed' ||

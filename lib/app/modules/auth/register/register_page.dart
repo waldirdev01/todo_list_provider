@@ -1,10 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/modules/auth/register/register_controller.dart';
+import 'package:validatorless/validatorless.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+import '../../../core/validators/validators.dart';
+
+class RegisterPage extends StatefulWidget {
+  RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _emailEC = TextEditingController();
+
+  final _passwordEC = TextEditingController();
+
+  final _confirmPasswordEC = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailEC.dispose();
+    _passwordEC.dispose();
+    _confirmPasswordEC.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<RegisterController>().addListener(() {
+      final controller = context.read<RegisterController>();
+      var success = controller.success;
+      var error = controller.error;
+      if (success) {
+        Navigator.of(context).pop();
+      } else if (error != null && error.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,44 +93,72 @@ class RegisterPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Form(
+                key: _formKey,
                 child: Column(
-              children: [
-                TodoListField(label: 'E-mail'),
-                const SizedBox(
-                  height: 20,
-                ),
-                TodoListField(
-                  label: 'Senha',
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TodoListField(
-                  label: 'Confirme asenha',
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      textStyle: context.titleStyle,
-                      primary: context.elevateseButtonColor,
+                  children: [
+                    TodoListField(
+                      controller: _emailEC,
+                      label: 'E-mail',
+                      validator: Validatorless.multiple([
+                        Validatorless.required('E-mail obrigatório'),
+                        Validatorless.email('E-mail inválido'),
+                      ]),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacementNamed('/login');
-                    },
-                    child: Text(
-                      'Cadastrar',
-                      style: context.titleStyle,
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                ),
-              ],
-            )),
+                    TodoListField(
+                      controller: _passwordEC,
+                      label: 'Senha',
+                      validator: Validatorless.multiple([
+                        Validatorless.required('Senha obrigatória'),
+                        Validatorless.min(6, 'Senha muito curta'),
+                      ]),
+                      obscureText: true,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TodoListField(
+                      controller: _confirmPasswordEC,
+                      label: 'Confirme asenha',
+                      obscureText: true,
+                      validator: Validatorless.multiple([
+                        Validatorless.required('Senha obrigatória'),
+                        Validatorless.min(6, 'Senha muito curta'),
+                        Validators.compare(_passwordEC, 'Senhas não coincidem'),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            textStyle: context.titleStyle,
+                            backgroundColor: context.elevateseButtonColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        onPressed: () {
+                          final formValid =
+                              _formKey.currentState?.validate() ?? false;
+                          if (formValid) {
+                            final email = _emailEC.text;
+                            final password = _passwordEC.text;
+                            context
+                                .read<RegisterController>()
+                                .registerUser(email, password);
+                          }
+                        },
+                        child: Text(
+                          'Cadastrar',
+                          style: context.titleStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
           ),
         ],
       ),
