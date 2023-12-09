@@ -33,7 +33,7 @@ class _AppWidgetState extends State<AppWidget> {
     return MaterialApp(
       title: 'Todo List Provider',
       theme: TodoListUiConfig.themeCustom,
-      home: const LoginPage(),
+      initialRoute: '/login',
       routes: {...AuthModule().routes},
     );
   }

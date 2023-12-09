@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/core/notifier/default_listener_notofier.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
+import 'package:todo_list_provider/app/modules/auth/login/login_controller.dart';
+import 'package:validatorless/validatorless.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +17,29 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailEC = TextEditingController();
+  final _passwordEC = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    DefaultListenerNotifier(changeNotifier: context.read<LoginController>())
+        .listener(
+      context: context,
+      successCallBack: (notifier, listenerInstance) {
+        debugPrint('sucesso');
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailEC.dispose();
+    _passwordEC.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,24 +53,35 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const TodoListLog(),
+                const TodoListLogo(),
                 Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                     child: Form(
+                      key: _formKey,
                       child: Column(
                         children: [
                           TodoListField(
                             label: 'e-mail',
+                            controller: _emailEC,
                             suffixIcon: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(Icons.email)),
+                            validator: Validatorless.multiple([
+                              Validatorless.required('Campo obrigatório'),
+                              Validatorless.email('E-mail inválido')
+                            ]),
                           ),
                           const SizedBox(height: 10),
                           TodoListField(
-                            label: 'senha',
-                            obscureText: true,
-                          ),
+                              label: 'senha',
+                              obscureText: true,
+                              controller: _passwordEC,
+                              validator: Validatorless.multiple([
+                                Validatorless.required('Campo obrigatório'),
+                                Validatorless.min(
+                                    6, 'Senha deve ter no mínimo 6 caracteres')
+                              ])),
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,8 +97,16 @@ class _LoginPageState extends State<LoginPage> {
                                   textStyle: context.titleStyle,
                                 ),
                                 onPressed: () {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/splash');
+                                  final formValid =
+                                      _formKey.currentState!.validate() ??
+                                          false;
+                                  if (formValid) {
+                                    final email = _emailEC.text;
+                                    final password = _passwordEC.text;
+                                    context
+                                        .read<LoginController>()
+                                        .login(email, password);
+                                  }
                                 },
                                 child: Text(
                                   'Login',

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list_provider/app/core/notifier/default_listener_notofier.dart';
 import 'package:todo_list_provider/app/modules/auth/register/register_controller.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
-
 import '../../../core/validators/validators.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -35,23 +35,20 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    context.read<RegisterController>().addListener(() {
-      final controller = context.read<RegisterController>();
-      var success = controller.success;
-      var error = controller.error;
-      if (success) {
-        Navigator.of(context).pop();
-      } else if (error != null && error.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    });
+    final defaultListener = DefaultListenerNotifier(
+        changeNotifier: context.read<RegisterController>());
+    defaultListener.listener(
+        context: context,
+        successCallBack: (notifier, listenerInstance) {
+          listenerInstance.dispose();
+          Navigator.of(context).pop();
+        },
+        errorCallback: (notifier, listenerInstance) {
+          print('Erro ao registrar usuário');
+        });
   }
 
+//TODO integrando a tela de login
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5,
             child: const FittedBox(
-              child: TodoListLog(),
+              child: TodoListLogo(),
             ),
           ),
           Padding(

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:todo_list_provider/app/core/ui/toto_list_icons.dart';
 
