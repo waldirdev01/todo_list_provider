@@ -6,9 +6,9 @@ abstract class TodoListModule {
   final Map<String, WidgetBuilder> _routes;
   final List<SingleChildWidget>? _bindings;
   TodoListModule(
-      {required Map<String, WidgetBuilder> routes,
+      {required Map<String, WidgetBuilder> routers,
       List<SingleChildWidget>? bindings})
-      : _routes = routes,
+      : _routes = routers,
         _bindings = bindings;
 
   Map<String, WidgetBuilder> get routes {

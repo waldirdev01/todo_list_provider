@@ -9,7 +9,7 @@ class DefaultChangNotifier extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isSuccess => _success;
 
-  void showLoaing() => _isLoading = true;
+  void showLoading() => _isLoading = true;
   void hideLoading() => _isLoading = false;
   void success() => _success = true;
   void setError(String? message) => _error = message;
@@ -19,7 +19,7 @@ class DefaultChangNotifier extends ChangeNotifier {
   }
 
   showloadingAndResetState() {
-    showLoaing();
+    showLoading();
     resetState();
   }
 }

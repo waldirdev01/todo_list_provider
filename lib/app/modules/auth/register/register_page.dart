@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
   }
 
-//TODO integrando a tela de login
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,6 +3,7 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list_provider/app/core/notifier/default_listener_notofier.dart';
+import 'package:todo_list_provider/app/core/ui/messages.dart';
 import 'package:todo_list_provider/app/core/ui/theme_extensions.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_field.dart';
 import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
@@ -20,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
+  final _emailFocus = FocusNode();
 
   @override
   void initState() {
@@ -27,6 +29,13 @@ class _LoginPageState extends State<LoginPage> {
     DefaultListenerNotifier(changeNotifier: context.read<LoginController>())
         .listener(
       context: context,
+      everCallback: (notifier, listenerInstance) {
+        if (notifier is LoginController) {
+          if (notifier.hasInfo) {
+            Messages.of(context).showInfo(notifier.infoMensage!);
+          }
+        }
+      },
       successCallBack: (notifier, listenerInstance) {
         debugPrint('sucesso');
       },
@@ -62,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           TodoListField(
+                            focusNode: _emailFocus,
                             label: 'e-mail',
                             controller: _emailEC,
                             suffixIcon: IconButton(
@@ -87,7 +97,18 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (_emailEC.text.isNotEmpty) {
+                                    context
+                                        .read<LoginController>()
+                                        .forgotPassword(_emailEC.text);
+                                  } else {
+                                    _emailFocus.requestFocus();
+
+                                    Messages.of(context)
+                                        .showError('Informe o e-mail');
+                                  }
+                                },
                                 child: Text('Esqueceu a senha?',
                                     style: context.titleStyle),
                               ),
@@ -122,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(
                     child: Container(
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  width: double.infinity,
                   decoration: BoxDecoration(
                       border: Border(
                           top: BorderSide(
@@ -136,15 +158,17 @@ class _LoginPageState extends State<LoginPage> {
                       SignInButton(
                         Buttons.Google,
                         text: 'Login com Google',
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<LoginController>().loginGoogle();
+                        },
                         shape: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20)),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 30),
+                            horizontal: 10, vertical: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Não tem conta?',
