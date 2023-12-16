@@ -27,6 +27,7 @@ class TodoListIcons {
 
   static const IconData eye =
       IconData(0xf06e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: constant_identifier_names
   static const IconData eye_slash =
       IconData(0xf070, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

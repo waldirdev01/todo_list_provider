@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 extension ThemeExtension on BuildContext {
-  Color get myCustomPrimaryColor => Color.fromARGB(255, 178, 182, 205);
+  Color get myCustomPrimaryColor => const Color.fromARGB(255, 178, 182, 205);
   Color get primaryColor => Theme.of(this).primaryColor;
   Color get primaryColorLight => Theme.of(this).primaryColorLight;
   Color get primaryColorDark => Theme.of(this).primaryColorDark;
-  Color get elevateseButtonColor => Color.fromARGB(255, 102, 120, 219);
+  Color get elevateseButtonColor => const Color.fromARGB(255, 102, 120, 219);
   TextTheme get textTheme => Theme.of(this).textTheme;
   TextStyle get titleStyle => TextStyle(
         fontSize: 14,

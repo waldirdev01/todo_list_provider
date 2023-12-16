@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -110,9 +108,7 @@ class UserRepositoryImpl implements UserRepository {
             await _firebaseAuth.signInWithCredential(firebaseCredential);
         return userCredential.user;
       }
-    } on FirebaseAuthException catch (e, s) {
-      print(e);
-      print(s);
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw AuthException(
             message:
@@ -123,6 +119,7 @@ class UserRepositoryImpl implements UserRepository {
         throw AuthException(message: e.message ?? 'Erro ao realizar login');
       }
     }
+    return null;
   }
 
   @override

@@ -119,8 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 onPressed: () {
                                   final formValid =
-                                      _formKey.currentState!.validate() ??
-                                          false;
+                                      _formKey.currentState!.validate();
                                   if (formValid) {
                                     final email = _emailEC.text;
                                     final password = _passwordEC.text;

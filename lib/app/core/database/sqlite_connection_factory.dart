@@ -4,7 +4,9 @@ import 'package:synchronized/synchronized.dart';
 import 'package:todo_list_provider/app/core/database/sqlite_migration_factory.dart';
 
 class SqliteConnectionFactory {
+  // ignore: constant_identifier_names
   static const _VERSION = 1;
+  // ignore: constant_identifier_names
   static const _DATABASE_NAME = 'TODO_LIST_PROVIDER';
   static SqliteConnectionFactory? _instance;
   final _lock = Lock();
