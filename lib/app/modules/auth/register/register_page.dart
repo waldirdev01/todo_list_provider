@@ -9,7 +9,7 @@ import 'package:todo_list_provider/app/core/widget/todo_list_logo.dart';
 import '../../../core/validators/validators.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -43,8 +43,11 @@ class _RegisterPageState extends State<RegisterPage> {
           listenerInstance.dispose();
           Navigator.of(context).pop();
         },
-        errorCallback: (notifier, listenerInstance) {});
+        errorCallback: (notifier, listenerInstance) {
+          print('Erro ao registrar usuário');
+        });
   }
+
 
   @override
   Widget build(BuildContext context) {

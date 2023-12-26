@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:todo_list_provider/app/core/notifier/default_changer_notifier.dart';
 import 'package:todo_list_provider/app/exceptions/auth_exceptions.dart';
@@ -14,6 +16,8 @@ class RegisterController extends DefaultChangNotifier {
       showloadingAndResetState();
       notifyListeners();
       final user = await _userService.register(email, password);
+      print('user: $user');
+      print(email);
       if (user != null) {
         success();
       } else {
