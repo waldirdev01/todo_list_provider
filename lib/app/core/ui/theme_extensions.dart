@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension ThemeExtension on BuildContext {
+extension ThemeExtensions on BuildContext {
   Color get myCustomPrimaryColor => Color.fromARGB(255, 178, 182, 205);
   Color get primaryColor => Theme.of(this).primaryColor;
   Color get primaryColorLight => Theme.of(this).primaryColorLight;
