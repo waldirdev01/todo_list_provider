@@ -74,7 +74,7 @@ class HomeDrawer extends StatelessWidget {
                           await context
                               .read<UserService>()
                               .updateDisplayName(name);
-
+                       
                           // ignore: use_build_context_synchronously
                           Navigator.of(context).pop();
                         }
