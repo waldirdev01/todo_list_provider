@@ -6,9 +6,36 @@ import 'package:todo_list_provider/app/modules/home/widgets/home_filters.dart';
 import 'package:todo_list_provider/app/modules/home/widgets/home_header.dart';
 import 'package:todo_list_provider/app/modules/home/widgets/home_week_filter.dart';
 import 'package:todo_list_provider/app/modules/home/widgets/task.dart';
+import 'package:todo_list_provider/app/modules/task/task_create_page.dart';
+import 'package:todo_list_provider/app/modules/task/task_module.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  /* void _goToCreateTask(BuildContext context) {
+     Navigator.of(context).pushNamed('/task/create'); primera forma (tradicional)
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => TaskModule().getPage('/task/create', context), aqui foi só pra se exibir
+    ));
+  }*/
+
+  void _goToCreateTask(BuildContext context) {
+    Navigator.of(context).push(PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 400),
+        transitionsBuilder: (context, animation, secundaryAnimation, child) {
+          animation =
+              CurvedAnimation(parent: animation, curve: Curves.easeInSine);
+          return ScaleTransition(
+            scale: animation,
+            alignment: Alignment.bottomRight,
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            TaskModule().getPage('/task/create', context)));
+  }
+  //o probelma: como passar a controller? se apenas passar o context.read() dá um erro
+  //porque o TaskCreateController está abaixo na hierarquia de dependências. A solucao é passar a navegação para o TodoListModule
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +86,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: context.primaryColor,
-        onPressed: () {},
+        onPressed: () => _goToCreateTask(context),
         child: const Icon(
           Icons.add,
           color: Colors.white,

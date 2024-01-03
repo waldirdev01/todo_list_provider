@@ -15,4 +15,13 @@ abstract class TodoListModule {
     return _routes.map((key, pageBuilder) => MapEntry(key,
         (context) => TodoListPage(bindings: _bindings, page: pageBuilder)));
   }
+
+  Widget getPage(String path, BuildContext context) {
+    final widgetBuilder = _routes[path];
+    if (widgetBuilder != null) {
+      return TodoListPage(bindings: _bindings, page: widgetBuilder);
+    } else {
+      throw Exception('Rota não encontrada');
+    }
+  }
 }
